@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--配置扫描器-->
+    <context:component-scan base-package="cn.fcsca.controller"/>
+
+    <!--=================注册视图资源解析器=================-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <!--前缀-->
+    <property name="prefix" value="/jsp/"/>
+    <!--后缀-->
+    <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--注册日期类型转换器-->
+    <bean id="mDateConverter" class="cn.fcsca.converters.MDateConverter"/>
+    <!--注册转换服务对象-->
+    <bean id="connectorServerFactoryBean" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters" ref="mDateConverter">
+            <!--配置多个-->
+            <!--<set>-->
+                <!--<ref bean="mDateConverter"/>-->
+            <!--</set>-->
+        </property>
+    </bean>
+
+    <!--将转换服务注册到MVC注解驱动里-->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
+</beans>
